@@ -3,7 +3,8 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { BeerProfile, StyleFamily, StrengthCategory, Drinkability, HazeLevel, ConfidenceLevel } from "../types";
 
 // Note: process.env.API_KEY is handled by the platform
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+// Always use the API key directly from process.env.API_KEY for initialization
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 const beerProfileSchema = {
   type: Type.OBJECT,
@@ -82,6 +83,7 @@ export const analyzeBeerImage = async (base64Image: string): Promise<Partial<Bee
       },
     });
 
+    // Access the .text property directly (do not call as a method)
     const result = JSON.parse(response.text || '{}');
     return {
       ...result,

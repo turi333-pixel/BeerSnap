@@ -10,6 +10,7 @@ import PreferenceView from './components/PreferenceView';
 import { analyzeBeerImage } from './services/geminiService';
 import { extractTextFromImage } from './services/ocrService';
 import { getProfileFromText } from './services/inferenceEngine';
+import { createThumbnail } from './services/imageUtils';
 
 type View = 'home' | 'camera' | 'result' | 'history' | 'favorites' | 'preferences' | 'loading';
 type AnalysisMode = 'ai' | 'local';
@@ -50,7 +51,11 @@ const App: React.FC = () => {
 
   const persistItems = (key: string, items: BeerProfile[]) => {
     try {
-      const storageItems = items.map(item => ({ ...item, imageData: undefined }));
+      // Stripping high-res but KEEPING thumbnailData
+      const storageItems = items.map(item => ({ 
+        ...item, 
+        imageData: undefined 
+      }));
       localStorage.setItem(key, JSON.stringify(storageItems));
     } catch (e) {
       console.error(`Failed to save ${key} to localStorage`, e);
@@ -91,21 +96,28 @@ const App: React.FC = () => {
     setLoadingProgress(0);
 
     try {
+      // Create thumbnail immediately for storage
+      const thumbnail = await createThumbnail(base64);
+
+      let profileData: Partial<BeerProfile>;
       if (analysisMode === 'ai') {
         setLoadingMessage('Gemini AI is analyzing...');
-        const profile = await analyzeBeerImage(base64);
-        const fullProfile = { ...profile, imageData: base64 } as BeerProfile;
-        setCurrentProfile(fullProfile);
-        saveToHistory(fullProfile);
+        profileData = await analyzeBeerImage(base64);
       } else {
         setLoadingMessage('Extracting text (OCR)...');
         const { text } = await extractTextFromImage(base64, (p) => setLoadingProgress(p * 100));
         setLoadingMessage('Inferring beer profile...');
-        const profile = getProfileFromText(text);
-        const fullProfile = { ...profile, imageData: base64 };
-        setCurrentProfile(fullProfile);
-        saveToHistory(fullProfile);
+        profileData = getProfileFromText(text);
       }
+
+      const fullProfile = { 
+        ...profileData, 
+        imageData: base64, 
+        thumbnailData: thumbnail 
+      } as BeerProfile;
+
+      setCurrentProfile(fullProfile);
+      saveToHistory(fullProfile);
       setCurrentView('result');
     } catch (err) {
       console.error(err);
@@ -203,7 +215,7 @@ const App: React.FC = () => {
         return <HistoryView items={history} onSelect={(p) => { setCurrentProfile(p); setCurrentView('result'); }} onBack={() => setCurrentView('home')} />;
 
       case 'favorites':
-        return <FavoritesView items={favorites} onSelect={(p) => { setCurrentProfile(p); setCurrentView('result'); }} onBack={() => setCurrentView('home')} />;
+        return <FavoritesView items={favorites} preferences={preferences} onSelect={(p) => { setCurrentProfile(p); setCurrentView('result'); }} onBack={() => setCurrentView('home')} />;
 
       case 'preferences':
         return <PreferenceView onBack={() => { handlePrefsUpdated(); setCurrentView('home'); }} />;

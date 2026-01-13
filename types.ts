@@ -62,7 +62,8 @@ export interface BeerProfile {
     why: string;
   };
   capturedAt: number;
-  imageData?: string; // base64
+  imageData?: string; // High-res base64 (memory only)
+  thumbnailData?: string; // Low-res base64 (for storage)
 }
 
 export interface UserPreferences {
