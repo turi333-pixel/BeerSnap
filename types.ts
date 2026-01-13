@@ -66,8 +66,7 @@ export interface BeerProfile {
 }
 
 export interface UserPreferences {
-  likesHazy: boolean;
   minAbv: number;
-  maxAbv: number;
   favFamilies: StyleFamily[];
+  favStyles: string[];
 }
