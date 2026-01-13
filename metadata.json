@@ -1,0 +1,7 @@
+{
+  "name": "BeerSnap",
+  "description": "Snap a beer label or menu to instantly see if you'll like it. Provides taste profiles, style facts, and an opinionated verdict.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
