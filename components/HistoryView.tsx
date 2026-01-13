@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ChevronLeft, Clock } from 'lucide-react';
+import { ChevronLeft, Clock, MapPin } from 'lucide-react';
 import { BeerProfile } from '../types';
 
 interface Props {
@@ -50,7 +50,11 @@ const HistoryView: React.FC<Props> = ({ items, onSelect, onBack }) => {
               </div>
               <div className="flex-1 min-w-0 flex flex-col justify-center">
                 <h4 className="font-bold text-white truncate leading-tight">{item.name}</h4>
-                <p className="text-[10px] text-slate-400 font-bold truncate uppercase tracking-widest mt-0.5">{item.brewery}</p>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <p className="text-[10px] text-slate-400 font-bold truncate uppercase tracking-widest">{item.brewery}</p>
+                  <span className="text-[10px] text-slate-600">•</span>
+                  <p className="text-[10px] text-slate-500 font-bold truncate uppercase tracking-widest">{item.country}</p>
+                </div>
                 <div className="flex items-center gap-2 mt-3">
                   <span className="text-[9px] px-2 py-0.5 bg-amber-500 text-slate-900 font-black rounded uppercase">{item.style}</span>
                   <span className="text-[9px] text-slate-500 font-bold">{new Date(item.capturedAt).toLocaleDateString()}</span>

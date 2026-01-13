@@ -11,10 +11,9 @@ export const getProfileFromText = (text: string): BeerProfile => {
   // 1. Identification
   let name = "Unknown Beer";
   let brewery = "Unknown Brewery";
+  let country = "Unknown Country";
   
   // Very basic extraction: looking for common beer brand markers
-  // In a real app, you might use regex or a local fuzzy-search database
-  const breweryKeywords = ['brewing', 'brewery', 'company', 'beers'];
   const lines = text.split('\n').filter(l => l.trim().length > 3);
   if (lines.length > 0) {
     name = lines[0].trim();
@@ -71,6 +70,7 @@ export const getProfileFromText = (text: string): BeerProfile => {
     id: crypto.randomUUID(),
     name,
     brewery,
+    country,
     style,
     styleFamily: family,
     abv,

@@ -1,6 +1,6 @@
 
 import React, { useMemo } from 'react';
-import { ChevronLeft, Heart, Star, Beer } from 'lucide-react';
+import { ChevronLeft, Heart, Star, Beer, MapPin } from 'lucide-react';
 import { BeerProfile, UserPreferences } from '../types';
 
 interface Props {
@@ -61,7 +61,6 @@ const FavoritesView: React.FC<Props> = ({ items, preferences, onSelect, onBack }
                     />
                   ) : (
                     <div className="w-full h-full bg-slate-800 flex items-center justify-center">
-                       {/* Fixed: Use Beer icon component correctly */}
                        <Beer size={48} className="text-slate-700" />
                     </div>
                   )}
@@ -85,9 +84,15 @@ const FavoritesView: React.FC<Props> = ({ items, preferences, onSelect, onBack }
                     <h4 className="font-bold text-white text-sm line-clamp-1 leading-tight mb-0.5">
                       {item.name}
                     </h4>
-                    <p className="text-[10px] text-slate-300 font-bold uppercase tracking-tight opacity-80 truncate mb-1">
-                      {item.brewery}
-                    </p>
+                    <div className="flex items-center gap-1.5 opacity-80 mb-1">
+                      <p className="text-[9px] text-slate-200 font-bold uppercase tracking-tight truncate max-w-[70px]">
+                        {item.brewery}
+                      </p>
+                      <span className="text-[8px] opacity-40">•</span>
+                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-tight truncate">
+                        {item.country}
+                      </p>
+                    </div>
                     <div className="flex items-center gap-1.5">
                        <span className="text-[9px] font-black px-1.5 py-0.5 bg-white/20 backdrop-blur-md rounded-md text-white uppercase">
                          {item.style}

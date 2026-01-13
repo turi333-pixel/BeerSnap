@@ -44,6 +44,7 @@ export interface BeerProfile {
   id: string;
   name: string;
   brewery: string;
+  country: string;
   style: string;
   substyle?: string;
   styleFamily: StyleFamily;

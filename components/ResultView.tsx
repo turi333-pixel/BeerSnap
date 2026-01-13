@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { ChevronLeft, Info, ThumbsUp, ThumbsDown, Star, AlertCircle, Heart, CheckCircle2 } from 'lucide-react';
+import { ChevronLeft, Info, ThumbsUp, ThumbsDown, Star, AlertCircle, Heart, CheckCircle2, MapPin } from 'lucide-react';
 import { BeerProfile, HazeLevel, ConfidenceLevel, UserPreferences } from '../types';
 
 interface Props {
@@ -112,7 +112,14 @@ const ResultView: React.FC<Props> = ({ profile, preferences, isFavorite, onToggl
           <div className="flex justify-between items-start mb-4">
             <div>
               <h1 className="text-3xl font-black leading-tight mb-1">{profile.name}</h1>
-              <p className="text-slate-900/70 font-bold uppercase tracking-widest text-xs">{profile.brewery}</p>
+              <div className="flex items-center gap-1.5 opacity-80">
+                <p className="font-bold uppercase tracking-widest text-xs">{profile.brewery}</p>
+                <span className="text-xs opacity-50">•</span>
+                <div className="flex items-center gap-1">
+                  <MapPin size={10} />
+                  <p className="font-bold uppercase tracking-widest text-[10px]">{profile.country}</p>
+                </div>
+              </div>
             </div>
             <div className="bg-slate-900/10 p-2 rounded-full backdrop-blur-sm">
               <Star size={20} className="fill-slate-900/20" />

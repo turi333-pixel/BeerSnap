@@ -11,6 +11,7 @@ const beerProfileSchema = {
   properties: {
     name: { type: Type.STRING, description: "Best guess for beer name" },
     brewery: { type: Type.STRING, description: "Best guess for brewery name" },
+    country: { type: Type.STRING, description: "The country of origin for the brewery" },
     style: { type: Type.STRING, description: "General style like IPA, Stout, etc." },
     substyle: { type: Type.STRING, description: "Specific substyle" },
     styleFamily: { 
@@ -60,7 +61,7 @@ const beerProfileSchema = {
     }
   },
   required: [
-    "name", "brewery", "style", "styleFamily", "abv", "strengthCategory", 
+    "name", "brewery", "country", "style", "styleFamily", "abv", "strengthCategory", 
     "drinkability", "haze", "taste", "flavourNotes", "verdict", 
     "youWillLikeIf", "avoidIf", "confidence"
   ]
@@ -73,7 +74,7 @@ export const analyzeBeerImage = async (base64Image: string): Promise<Partial<Bee
       contents: {
         parts: [
           { inlineData: { data: base64Image.split(',')[1], mimeType: 'image/jpeg' } },
-          { text: "Analyze this beer label or menu. Extract all relevant beer details and provide a full profile based on the visual information and your knowledge of common beer styles." }
+          { text: "Analyze this beer label or menu. Extract all relevant beer details including name, brewery name, and country of origin. Provide a full profile based on the visual information and your knowledge of common beer styles." }
         ]
       },
       config: {
@@ -83,7 +84,7 @@ export const analyzeBeerImage = async (base64Image: string): Promise<Partial<Bee
       },
     });
 
-    // Access the .text property directly (do not call as a method)
+    // Access the .text property directly
     const result = JSON.parse(response.text || '{}');
     return {
       ...result,
